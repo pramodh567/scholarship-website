@@ -1,5 +1,10 @@
-import { Router } from "express";
-Router.get('/api/details', async (req,res)=>{
+import express from "express";
+import mongoose from "mongoose";
+import Test from '../models/test.model.js';
+
+const Router=express();
+
+Router.get('/', async (req,res)=>{
   try{
     const list= await Test.find({});
     return res.status(200).json({success:true,data:list});
@@ -9,7 +14,7 @@ Router.get('/api/details', async (req,res)=>{
   }
 });
 
-Router.post('/api/details', async (req,res)=>{
+Router.post('/', async (req,res)=>{
   const detail=req.body;
 
   if(!detail.name||!detail.cpa||!detail.branch){
@@ -27,7 +32,7 @@ Router.post('/api/details', async (req,res)=>{
   }
 });
 
-Router.put('/api/details/:id', async(req,res)=>{
+Router.put('/:id', async(req,res)=>{
   const {id}=req.params;
   const update=req.body;
 
@@ -45,7 +50,7 @@ Router.put('/api/details/:id', async(req,res)=>{
   }
 });
 
-Router.delete('/api/details/:id', async(req,res)=>{
+Router.delete('/:id', async(req,res)=>{
   const { id }=req.params;
 
   try{
@@ -57,3 +62,5 @@ Router.delete('/api/details/:id', async(req,res)=>{
     return res.status(500).json({success:false,message:"internal server error"});
   }
 });
+
+export default Router;
