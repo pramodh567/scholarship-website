@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Test from '../models/test.model.js';
 
-export const getdetails= async (req,res)=>{
+export const getdetails = async (req,res)=>{
   try{
     const list= await Test.find({});
     return res.status(200).json({success:true,data:list});
@@ -11,7 +11,7 @@ export const getdetails= async (req,res)=>{
   }
 };
 
-export const getdetailsbyid =async (req,res)=>{
+export const getdetailsbyid = async (req,res)=>{
   const {id} =req.params;
   if(!mongoose.Types.ObjectId.isValid(id)){
     return res.status(404).json({success:false,message:"the id does not have a corresponding id"});
@@ -25,7 +25,7 @@ export const getdetailsbyid =async (req,res)=>{
   }
 };
 
-export const postdetails =async (req,res)=>{
+export const postdetails = async (req,res)=>{
   const detail=req.body;
 
   if(!detail.name||!detail.cpa||!detail.branch){
@@ -64,6 +64,10 @@ export const updatedetails = async(req,res)=>{
 export const deletedetails = async(req,res)=>{
   const { id }=req.params;
 
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({success:false,message:"the id does not have a corresponding id"});
+  }
+  
   try{
     await Test.findByIdAndDelete(id);
     return res.status(200).json({success:true,message:"the details have been successfully deleted"});
