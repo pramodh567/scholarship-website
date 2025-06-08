@@ -5,13 +5,17 @@ const detailschema= new mongoose.Schema({
       type: String,
       required: true
     },
-    cpa:{
+    cpa_requriements:{
       type: Number,
       required: true
     },
-    branch:{
-      type: String,
-      required: true
+    award:{
+      type:Number,
+      required:true
+    },
+    link:{
+      type:String,
+      required:true
     }
   },
   {
@@ -19,5 +23,5 @@ const detailschema= new mongoose.Schema({
   }
 );
 
-const Test=mongoose.model('Scholarship',detailschema);
-export default Test;
+const scholarship=mongoose.model('Scholarship',detailschema);
+export default scholarship;

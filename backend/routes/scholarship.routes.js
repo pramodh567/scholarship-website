@@ -1,6 +1,6 @@
 import express from "express";
 
-import { deletedetails, getdetails, getdetailsbyid, postdetails, updatedetails } from "../controller/tedst..controller.js";
+import { deletedetails, getdetails, getdetailsbyid, postdetails, updatedetails } from "../controller/scholarship.controller.js";
 
 const Router=express();
 

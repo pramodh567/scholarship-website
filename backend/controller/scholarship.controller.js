@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Test from '../models/test.model.js';
+import Test from '../models/scholarship.model.js';
 
 export const getdetails = async (req,res)=>{
   try{
