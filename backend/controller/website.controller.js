@@ -1,11 +1,11 @@
 import NewAdd from '../models/websites.model.js';
 
 export const AddWebsite= async (req,res) => {
-  const {website,link,isvalid=false}=req.body;
+  const {website,link,github,isvalid=false}=req.body;
   if(!website||!link){
     return res.status(400).json({success:false,message:"give correct details"});
   }
-  const New_website=new NewAdd({website,link,isvalid});
+  const New_website=new NewAdd({website,link,github,isvalid});
   try {
     await New_website.save();
     return res.status(200).json({success:true,message:"the new website suggestion is given to the developper"});

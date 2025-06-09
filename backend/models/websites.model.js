@@ -9,6 +9,10 @@ const Newschema= new mongoose.Schema({
       type:String,
       required:true
     },
+    github:{
+      type:String,
+      default:""
+    },
     isvalid:{
       type:Boolean,
       default:false
