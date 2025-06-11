@@ -6,6 +6,6 @@ const Router=express();
 
 Router.post('/',AddWebsite);
 
-Router.get('/',GetWebsites)
+Router.get('/',GetWebsites);
 
 export default Router; 

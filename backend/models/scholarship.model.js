@@ -5,16 +5,20 @@ const detailschema= new mongoose.Schema({
       type: String,
       required: true
     },
-    cpa_requriements:{
-      type: Number,
-      required: true
-    },
-    award:{
-      type:Number,
-      required:true
-    },
     link:{
       type:String,
+      required:true
+    },
+    gpa:{
+      type: Number,
+      default:0
+    },
+    award:{
+      type: String,
+      required:true
+    },
+    deadline:{
+      type: String,
       required:true
     }
   },

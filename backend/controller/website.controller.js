@@ -1,7 +1,7 @@
 import NewAdd from '../models/websites.model.js';
 
 export const AddWebsite= async (req,res) => {
-  const {website,link,github,isvalid=false}=req.body;
+  const {website,link,github="",isvalid=false}=req.body;
   if(!website||!link){
     return res.status(400).json({success:false,message:"give correct details"});
   }

@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
-import Test from '../models/scholarship.model.js';
+import scholarship from '../models/scholarship.model.js';
 
-export const getdetails = async (req,res)=>{
-  try{
-    const list= await Test.find({});
-    return res.status(200).json({success:true,data:list});
-  }catch(e){
-    console.error(e.message);
-    return res.status(500).json({success:false,message:"internal server error"});
+export const getdetails = async (req, res) => {
+  const { search } = req.query;
+  const filter = search ? { name: { $regex: search, $options: 'i' } } : {};
+
+  try {
+    const list = await scholarship.find(filter).limit(10);
+    return res.status(200).json({ success: true, data: list });
+  } catch (e) {
+    console.error("Error in getdetails:", e.message);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 
 export const getdetailsbyid = async (req,res)=>{
   const {id} =req.params;
@@ -17,7 +21,7 @@ export const getdetailsbyid = async (req,res)=>{
     return res.status(404).json({success:false,message:"the id does not have a corresponding id"});
   }
   try{
-    const list= await Test.findById(id);
+    const list= await scholarship.findById(id);
     return res.status(200).json({success:true,data:list});
   }catch(e){
     console.error(e.message);
@@ -32,7 +36,7 @@ export const postdetails = async (req,res)=>{
     return res.status(400).json({ success:false, message:"fill all the details !"});
   }
 
-  const newdata=new Test(detail);
+  const newdata=new scholarship(detail);
   try{
     await newdata.save();
     return res.status(201).json({ success:true,data:newdata});
@@ -52,7 +56,7 @@ export const updatedetails = async(req,res)=>{
   }
 
   try {
-    const updateproduct=await Test.findByIdAndUpdate(id,update,{new:true});
+    const updateproduct=await scholarship.findByIdAndUpdate(id,update,{new:true});
     return res.status(200).json({success:true,data:updateproduct});
   }
   catch (error) {
@@ -69,7 +73,7 @@ export const deletedetails = async(req,res)=>{
   }
   
   try{
-    await Test.findByIdAndDelete(id);
+    await scholarship.findByIdAndDelete(id);
     return res.status(200).json({success:true,message:"the details have been successfully deleted"});
   }
   catch(e){
