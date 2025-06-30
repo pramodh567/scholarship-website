@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SearchBar from "./searchBar";
+import SearchInput from "./SearchInput";
 
 function NavBar() {
   return (
@@ -27,12 +27,22 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
+              <Link className="nav-link mt-1" to={"/profile"}>
+                <h4>Profile</h4>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link mt-1" to={"/suggestions"}>
+                <h4>Suggestions</h4>
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link mt-1" to={"/create"}>
                 <h4>Dev-suggestions</h4>
               </Link>
             </li>
           </ul>
-          <SearchBar />
+          <SearchInput />
         </div>
       </div>
     </nav>
