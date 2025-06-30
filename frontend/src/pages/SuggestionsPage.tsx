@@ -1,14 +1,66 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface Scholarship {
+  _id: string;
+  name: string;
+  link: string;
+  course?: string;
+  gpa?: number;
+  award?: string;
+  deadline: string;
+}
+
 const SuggestionsPage = () => {
   const [profile, setProfile] = useState<any>(null);
+  const [, setScholarships] = useState<Scholarship[]>([]);
+  const [filtered, setFiltered] = useState<Scholarship[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const stored = localStorage.getItem("profile");
     if (stored) {
-      setProfile(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+      setProfile(parsed);
+
+      // Fetch scholarships
+      fetch("http://localhost:3000/api/details")
+        .then((res) => res.json())
+        .then((data) => {
+          setScholarships(data.data);
+          const matched = data.data
+            .filter((item: Scholarship) => {
+              const matchGPA = item.gpa == null || parsed.gpa >= item.gpa;
+
+              const cleanNumber = (val: string): number =>
+                parseFloat(val.replace(/[^0-9.]/g, ""));
+
+              const profileMinAward = cleanNumber(parsed.minAward);
+              const scholarshipAward = cleanNumber(item.award || "");
+
+              const matchAward =
+                isNaN(profileMinAward) || isNaN(scholarshipAward)
+                  ? true
+                  : scholarshipAward >= profileMinAward;
+
+              const matchCourse =
+                !item.course ||
+                !parsed.course ||
+                item.course.toLowerCase() === parsed.course.toLowerCase();
+
+              return matchGPA && matchAward && matchCourse;
+            })
+            .sort((a: Scholarship, b: Scholarship) => {
+              const dateA = new Date(a.deadline).getTime() || Infinity;
+              const dateB = new Date(b.deadline).getTime() || Infinity;
+              return dateA - dateB;
+            });
+
+          setFiltered(matched);
+        })
+        .catch((err) =>
+          console.error("Error fetching scholarships for suggestions:", err)
+        );
     }
   }, []);
 
@@ -29,20 +81,34 @@ const SuggestionsPage = () => {
 
   return (
     <div className="container mt-4">
-      <h3>Suggestions Based on Your Profile</h3>
-      <p>
-        <strong>Name:</strong> {profile.name}
-      </p>
-      <p>
-        <strong>Course:</strong> {profile.course}
-      </p>
-      <p>
-        <strong>GPA:</strong> {profile.gpa}
-      </p>
-      <p>
-        <strong>Minimum Award:</strong> {profile.minAward}
-      </p>
-      {/* You can add logic here to filter scholarships using this profile */}
+      <h3>Scholarship Suggestions for You</h3>
+      {filtered.length === 0 ? (
+        <p className="mt-3">No suggestions match your profile at the moment.</p>
+      ) : (
+        filtered.map((scholarship) => (
+          <div key={scholarship._id} className="card mb-3">
+            <div className="card-body">
+              <h5 className="card-title">{scholarship.name}</h5>
+              <p>
+                <strong>Deadline:</strong> {scholarship.deadline || "Any"}
+                <br />
+                <strong>GPA:</strong>{" "}
+                {scholarship.gpa != null ? scholarship.gpa : "Any"}
+                <br />
+                <strong>Minimum Award:</strong> {scholarship.award || "Any"}
+              </p>
+              <a
+                href={scholarship.link}
+                className="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View
+              </a>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 };
