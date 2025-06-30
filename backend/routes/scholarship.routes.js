@@ -2,7 +2,7 @@ import express from "express";
 
 import { deletedetails, getdetails, getdetailsbyid, postdetails, updatedetails } from "../controller/scholarship.controller.js";
 
-const Router=express();
+const Router=express.Router();
 
 Router.get('/',getdetails);
 Router.get('/:id',getdetailsbyid);

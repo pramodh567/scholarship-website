@@ -2,7 +2,7 @@ import express from 'express'
 import { AddWebsite, GetWebsites } from '../controller/website.controller.js';
 
 
-const Router=express();
+const Router=express.Router();
 
 Router.post('/',AddWebsite);
 
